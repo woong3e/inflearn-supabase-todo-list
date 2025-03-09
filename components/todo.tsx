@@ -5,6 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { deleteTodo, updateTodo } from 'actions/todo-actions';
 import { queryClient } from 'config/ReactQueryClientProvider';
 import { useState } from 'react';
+import moment from 'moment';
 
 export default function Todo({ todo }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -35,6 +36,12 @@ export default function Todo({ todo }) {
     },
   });
 
+  const formatDate = (date) => {
+    return moment(date).isValid()
+      ? moment(date).format('YYYY-MM-DD HH:mm:ss')
+      : 'Invalid date';
+  };
+
   return (
     <div className="w-full flex items-center gap-1">
       <Checkbox
@@ -55,6 +62,7 @@ export default function Todo({ todo }) {
         <p className={`flex-1 ${completed && 'line-through'}`}>{title}</p>
       )}
 
+      <p>created: {moment(todo.created_at).format('YYYY-MM-DD HH:mm:ss')}</p>
       {isEditing ? (
         <IconButton
           onClick={async () => {
